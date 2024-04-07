@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/bmi_calculator/result/result_screen.dart';
 import 'package:flutter/material.dart';
 
 class BmiMainScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class BmiMainScreen extends StatelessWidget {
             'BMI 계산기',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Colors.green.shade900,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -32,7 +33,7 @@ class BmiMainScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: '키',
                 ),
@@ -44,9 +45,9 @@ class BmiMainScreen extends StatelessWidget {
                   return null;
                 },
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: '몸무게',
                 ),
@@ -60,12 +61,21 @@ class BmiMainScreen extends StatelessWidget {
                   return null;
                 },
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {}
+                  if (_formKey.currentState?.validate() ?? false) {
+                    return;
+                  }
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => (const ResultScreen(
+                                height: 164.4,
+                                weight: 50.8,
+                              ))));
                 },
-                child: Text('결과'),
+                child: const Text('결과'),
               ),
             ],
           ),
