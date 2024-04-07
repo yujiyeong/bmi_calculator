@@ -2,11 +2,26 @@ import 'package:bmi_calculator/bmi_calculator/result/result_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BmiMainScreen extends StatelessWidget {
+class BmiMainScreen extends StatefulWidget {
+  const BmiMainScreen({super.key});
+
+  @override
+  State<BmiMainScreen> createState() => _BmiMainScreenState();
+}
+
+class _BmiMainScreenState extends State<BmiMainScreen> {
   /// form의 상태를 가지고 있는 것
   final _formKey = GlobalKey<FormState>();
 
-  BmiMainScreen({super.key});
+  final _heightController = TextEditingController();
+  final _weightController = TextEditingController();
+
+  @override
+  void dispose() {
+    _heightController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +49,7 @@ class BmiMainScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
+                controller: _heightController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: '키',
@@ -48,6 +64,7 @@ class BmiMainScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextFormField(
+                controller: _weightController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: '몸무게',
@@ -65,16 +82,16 @@ class BmiMainScreen extends StatelessWidget {
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
+                  if (_formKey.currentState?.validate() == false) {
                     return;
                   }
 
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => (const ResultScreen(
-                                height: 164.4,
-                                weight: 100,
+                          builder: (context) => (ResultScreen(
+                                height: double.parse(_heightController.text),
+                                weight: double.parse(_weightController.text),
                               ))));
                 },
                 child: const Text('결과'),
