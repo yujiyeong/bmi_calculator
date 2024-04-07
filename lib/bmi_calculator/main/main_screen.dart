@@ -1,4 +1,5 @@
 import 'package:bmi_calculator/bmi_calculator/result/result_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BmiMainScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class BmiMainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber.shade100,
-        title: Center(
+        title: const Center(
           child: Text(
             'BMI 계산기',
             style: TextStyle(
@@ -67,12 +68,13 @@ class BmiMainScreen extends StatelessWidget {
                   if (_formKey.currentState?.validate() ?? false) {
                     return;
                   }
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => (const ResultScreen(
                                 height: 164.4,
-                                weight: 50.8,
+                                weight: 100,
                               ))));
                 },
                 child: const Text('결과'),
