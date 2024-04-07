@@ -1,9 +1,9 @@
 import 'package:bmi_calculator/bmi_calculator/result/result_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BmiMainScreen extends StatefulWidget {
-  const BmiMainScreen({super.key});
+  const BmiMainScreen({Key? key}) : super(key: key);
 
   @override
   State<BmiMainScreen> createState() => _BmiMainScreenState();
@@ -12,15 +12,37 @@ class BmiMainScreen extends StatefulWidget {
 class _BmiMainScreenState extends State<BmiMainScreen> {
   /// form의 상태를 가지고 있는 것
   final _formKey = GlobalKey<FormState>();
-
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    load();
+  }
 
   @override
   void dispose() {
     _heightController.dispose();
     _weightController.dispose();
     super.dispose();
+  }
+
+  Future<void> save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('height', double.parse(_heightController.text));
+    await prefs.setDouble('weight', double.parse(_weightController.text));
+  }
+
+  Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final double? height = prefs.getDouble('height');
+    final double? weight = prefs.getDouble('weight');
+
+    if (height != null && weight != null) {
+      _heightController.text = '$height';
+      _weightController.text = '$weight';
+    }
   }
 
   @override
@@ -86,13 +108,17 @@ class _BmiMainScreenState extends State<BmiMainScreen> {
                     return;
                   }
 
+                  save();
+
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (ResultScreen(
-                                height: double.parse(_heightController.text),
-                                weight: double.parse(_weightController.text),
-                              ))));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultScreen(
+                        height: double.parse(_heightController.text),
+                        weight: double.parse(_weightController.text),
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('결과'),
               ),
